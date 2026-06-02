@@ -1,0 +1,20 @@
+services:
+  kimi-k2-6:
+    build:
+      context: .
+      args:
+        SGLANG_BASE_IMAGE: ${SGLANG_BASE_IMAGE:-lmsysorg/sglang:v0.5.12.post1}
+    image: ${SGLANG_IMAGE:-local/kimi-k2-6-nvfp4-sglang:latest}
+    container_name: ${CONTAINER_NAME:-sglang-kimi-k26}
+    network_mode: host
+    ipc: host
+    privileged: true
+    shm_size: ${SHM_SIZE:-96g}
+    gpus: all
+    env_file:
+      - .env
+    volumes:
+      - ${MODEL_DIR:-/mnt/llm_models/Kimi-K2.6-519B-NVFP4}:/workspace/model:ro
+      - ${LOG_DIR:-/mnt/llm_models/logs/kimi-k2.6}:/workspace/logs
+      - ${METRICS_DIR:-/mnt/llm_models/logs/kimi-k2.6/metrics}:/workspace/metrics
+    restart: unless-stopped
